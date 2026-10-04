@@ -10,6 +10,7 @@ const FetchGetRequest = () => {
     // Fetching data using fetch() and useEffect
     useEffect(() => {
         const fetchDataPosts = async() => {
+            setLoading(true);
             try {
                 const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=8`);
                 if (!response.ok) {
