@@ -22,6 +22,12 @@ export default function Navigation() {
         >
           Recipes
         </Link>
+        <Link
+          to="/users"
+          className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-md transition-colors"
+        >
+          Users
+        </Link>
       </div>
     </nav>
   );
