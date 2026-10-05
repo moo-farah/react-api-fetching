@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
 import ProductList from "./components/resources/ProductList";
 import RecipeList from "./components/resources/RecipeList";
+import UsersList from "./components/resources/UsersList";
 
 function HomePage() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/recipes" element={<RecipeList />} />
+        <Route path="/users" element={<UsersList />}/>
       </Routes>
     </BrowserRouter>
   );
