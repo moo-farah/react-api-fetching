@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Card from "../shared/Card";
-
+import SearchBar from "../shared/SearchBar";
 
 const API_URL = "https://dummyjson.com/products";
 
@@ -8,14 +8,12 @@ export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setQuery(search.trim()), 400);
-    return () => clearTimeout(timer);
-  }, [search]);
+  const handleSearch = (searchQuery) => {
+    setQuery(searchQuery);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -34,7 +32,6 @@ export default function ProductList() {
 
         const data = await res.json();
         setProducts(data.products);
-        console.log(data);
         setHasSearched(!!query);
       } catch (err) {
         if (err.name !== "AbortError") setError(err.message);
@@ -52,13 +49,7 @@ export default function ProductList() {
     <section className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Products</h1>
       
-      <input
-        type="search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search products (e.g. laptop, phone)"
-        className="w-full max-w-md px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-      />
+      <SearchBar onSearch={handleSearch} placeholder="Search products (e.g. laptop, phone)" />
 
       {loading && <p className="text-gray-600">Loading products...</p>}
       {error && <p className="text-red-600">Error loading products: {error}</p>}

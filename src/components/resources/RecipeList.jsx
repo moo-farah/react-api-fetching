@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SearchBar from "../shared/SearchBar";
 
 const BASE_URL = "https://dummyjson.com/recipes";
 
@@ -6,15 +7,12 @@ export default function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setQuery(search.trim()), 400);
-    return () => clearTimeout(timer);
-  }, [search]);
+  const handleSearch = (searchQuery) => {
+    setQuery(searchQuery);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -50,13 +48,7 @@ export default function RecipeList() {
     <section className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Recipes</h1>
       
-      <input
-        type="search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search recipes (e.g. pizza, salad)"
-        className="w-full max-w-md px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-      />
+      <SearchBar onSearch={handleSearch} placeholder="Search recipes (e.g. pizza, salad)" />
 
       {loading && <p className="text-gray-600">Loading recipes...</p>}
       {error && <p className="text-red-600">Error loading recipes: {error}</p>}
