@@ -2,7 +2,7 @@ export default function Card({ product }) {
   if (!product) return null;
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+    <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow grid">
       <img
         src={product.thumbnail}
         alt={product.title}

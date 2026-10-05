@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react"
 
-export default function SearchBar({ onSearch, placeholder = "Search..." }) {
+const SearchBar = ({ onSearch, placeholder = "Search..."}) => {
   const [value, setValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
 
@@ -14,14 +14,15 @@ export default function SearchBar({ onSearch, placeholder = "Search..." }) {
       onSearch(debouncedValue);
     }
   }, [debouncedValue, onSearch]);
-
   return (
-    <input
-      type="search"
+    <input 
+      type="search" 
       value={value}
       onChange={(e) => setValue(e.target.value)}
       placeholder={placeholder}
-      className="w-full max-w-md px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-    />
-  );
+      className="w-full max-w-md px-4 py-2 mb-6 bg-neutral-200 text-black rounded-full outline-neutral-400"
+      />
+  )
 }
+
+export default SearchBar
