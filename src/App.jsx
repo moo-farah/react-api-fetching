@@ -4,6 +4,7 @@ import ProductList from "./components/resources/ProductList";
 import RecipeList from "./components/resources/RecipeList";
 import UsersList from "./components/resources/UsersList";
 import PostList from "./components/resources/PostList";
+import CommentList from "./components/resources/CommentList";
 
 function HomePage() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/recipes" element={<RecipeList />} />
         <Route path="/users" element={<UsersList />}/>
         <Route path="/posts" element={<PostList />}/>
+        <Route path="/comments" element={<CommentList />}/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,49 +1,44 @@
-import { useState, useEffect } from "react";
-import Card from "../shared/Card";
-import SearchBar from "../shared/SearchBar";
+import { useEffect, useState } from "react"
+import SearchBar from "../shared/SearchBar"
+import Card from "../shared/Card"
+import { fetchProducts, searchProducts } from "../../api/products"
 
-const API_URL = "https://dummyjson.com/products";
-
-export default function ProductList() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
+const ProductList = () => {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [query, setQuery] = useState("")
+  const [hasSearched, setHasSearched] = useState(false)
 
   const handleSearch = (searchQuery) => {
-    setQuery(searchQuery);
-  };
+    setQuery(searchQuery)
+  }
 
   useEffect(() => {
-    const controller = new AbortController();
+    const controller = new AbortController()
 
     async function fetchProductsData() {
       try {
-        setLoading(true);
-        setError(null);
+        setLoading(true)
+        setError(null)
 
-        const url = query
-          ? `${API_URL}/search?q=${encodeURIComponent(query)}`
-          : API_URL;
+        const data = query
+          ? await searchProducts(query)
+          : await fetchProducts()
 
-        const res = await fetch(url, { signal: controller.signal });
-        if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
-
-        const data = await res.json();
-        setProducts(data.products);
-        setHasSearched(!!query);
+        setProducts(data.products)
+        setHasSearched(!!query)
       } catch (err) {
-        if (err.name !== "AbortError") setError(err.message);
+        if (err.name !== "AbortError") setError(err.message)
       } finally {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) setLoading(false)
       }
     }
 
-    fetchProductsData();
+    fetchProductsData()
 
-    return () => controller.abort();
-  }, [query]);
+    return () => controller.abort()
+  }, [query])
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
@@ -67,5 +62,7 @@ export default function ProductList() {
         </div>
       )}
     </section>
-  );
+  )
 }
+
+export default ProductList

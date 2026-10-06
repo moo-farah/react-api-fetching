@@ -35,6 +35,12 @@ export default function Navigation() {
         >
           Posts
         </Link>
+        <Link
+          to="/comments"
+          className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-md transition-colors"
+        >
+          Comments
+        </Link>
       </div>
     </nav>
   );
