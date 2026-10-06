@@ -3,6 +3,7 @@ import Navigation from "./components/layout/Navigation";
 import ProductList from "./components/resources/ProductList";
 import RecipeList from "./components/resources/RecipeList";
 import UsersList from "./components/resources/UsersList";
+import PostList from "./components/resources/PostList";
 
 function HomePage() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/products" element={<ProductList />} />
         <Route path="/recipes" element={<RecipeList />} />
         <Route path="/users" element={<UsersList />}/>
+        <Route path="/posts" element={<PostList />}/>
       </Routes>
     </BrowserRouter>
   );

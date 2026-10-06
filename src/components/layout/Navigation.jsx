@@ -28,6 +28,13 @@ export default function Navigation() {
         >
           Users
         </Link>
+
+        <Link
+          to="/posts"
+          className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-md transition-colors"
+        >
+          Posts
+        </Link>
       </div>
     </nav>
   );
