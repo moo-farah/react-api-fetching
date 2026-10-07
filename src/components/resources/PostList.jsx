@@ -3,47 +3,45 @@ import SearchBar from "../shared/SearchBar"
 import { fetchPosts, searchPosts } from "../../api/posts"
 import Card from "../shared/Card"
 
-
 const PostList = () => {
-    const [posts, setPosts] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [query, setQuery] = useState("")
-    const [hasSearched, setHasSearched] = useState(false)
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [query, setQuery] = useState("")
+  const [hasSearched, setHasSearched] = useState(false)
 
-    // Handles the search
-    const handleSearch = (searchQuery) => {
-        setQuery(searchQuery)
+  const handleSearch = (searchQuery) => {
+    setQuery(searchQuery)
+  }
+
+  // Handles fetching the data
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function fetchPostsData() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const data = query
+        ? await searchPosts(query)
+        : await fetchPosts();
+
+        setPosts(data.posts)
+        setHasSearched(!!query)
+        console.log(data)
+
+      } catch (err) {
+        if (err.name !== "AbortError") setError(err.message)
+      } finally {
+        if (!controller.signal.aborted) setLoading(false)
+      }
     }
+    fetchPostsData()
 
-    // Handles fetching the data
-
-    useEffect(() => {
-        const controller = new AbortController()
-
-        async function fetchPostsData() {
-            try {
-                setLoading(true)
-                setError(null)
-
-                const data = query
-                ? await searchPosts(query)
-                : await fetchPosts();
-
-                setPosts(data.posts)
-                setHasSearched(!!query)
-                console.log(data)
-
-            } catch (err) {
-                if (err.name !== "AbortError") setError(err.message)
-            } finally {
-                if (!controller.signal.aborted) setLoading(false)
-            }
-        }
-        fetchPostsData()
-
-        return () => controller.abort()
-    }, [query])
+    return () => controller.abort()
+  }, [query])
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
