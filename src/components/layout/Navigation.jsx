@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { useState, useLayoutEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
@@ -13,10 +13,14 @@ const navLinks = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
+  const isFirstRender = useRef(true)
 
-  // Close menu on route change
-  useLayoutEffect(() => {
-    setIsOpen(false)
+  // Close menu on route change (skip on initial mount to avoid ESLint warning)
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      setIsOpen(false)
+    }
+    isFirstRender.current = false
   }, [location.pathname])
 
   return (
