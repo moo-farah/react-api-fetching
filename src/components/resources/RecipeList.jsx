@@ -1,52 +1,47 @@
-import { useState, useEffect } from "react";
-import SearchBar from "../shared/SearchBar";
+import { useEffect, useState } from "react"
+import SearchBar from "../shared/SearchBar"
+import { fetchRecipes, searchRecipes } from "../../api/recipes"
 
-const BASE_URL = "https://dummyjson.com/recipes";
-
-export default function RecipeList() {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
+const RecipeList = () => {
+  const [recipes, setRecipes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [query, setQuery] = useState("")
+  const [hasSearched, setHasSearched] = useState(false)
 
   const handleSearch = (searchQuery) => {
-    setQuery(searchQuery);
-  };
+    setQuery(searchQuery)
+  }
 
   useEffect(() => {
-    const controller = new AbortController();
+    const controller = new AbortController()
 
-    async function fetchRecipes() {
+    async function fetchRecipesData() {
       try {
-        setLoading(true);
-        setError(null);
+        setLoading(true)
+        setError(null)
 
-        const url = query
-          ? `${BASE_URL}/search?q=${encodeURIComponent(query)}`
-          : BASE_URL;
+        const data = query
+          ? await searchRecipes(query)
+          : await fetchRecipes()
 
-        const res = await fetch(url, { signal: controller.signal });
-        if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
-
-        const data = await res.json();
-        setRecipes(data.recipes);
-        setHasSearched(!!query);
+        setRecipes(data.recipes)
+        setHasSearched(!!query)
       } catch (err) {
-        if (err.name !== "AbortError") setError(err.message);
+        if (err.name !== "AbortError") setError(err.message)
       } finally {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) setLoading(false)
       }
     }
 
-    fetchRecipes();
+    fetchRecipesData()
 
-    return () => controller.abort();
-  }, [query]);
+    return () => controller.abort()
+  }, [query])
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-3xl  text-gray-900 mb-6">Recipes</h1>
+      <h1 className="text-3xl text-gray-900 mb-6">Recipes</h1>
       
       <SearchBar onSearch={handleSearch} placeholder="Search recipes (e.g. pizza, salad)" />
 
@@ -80,5 +75,7 @@ export default function RecipeList() {
         </div>
       )}
     </section>
-  );
+  )
 }
+
+export default RecipeList

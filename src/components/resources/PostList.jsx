@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import SearchBar from "../shared/SearchBar"
+import { fetchPosts, searchPosts } from "../../api/posts"
+import Card from "../shared/Card"
 
-
-const API_URL = "https://dummyjson.com/posts"
 
 const PostList = () => {
     const [posts, setPosts] = useState([])
@@ -26,14 +26,10 @@ const PostList = () => {
                 setLoading(true)
                 setError(null)
 
-                const url = query
-                ? `${API_URL}/search?q=${encodeURIComponent(query)}`
-                : API_URL
-                
-                const res = await fetch(url, { signal: controller.signal })
-                if (!res.ok) throw new Error(`Requested failed with status ${res.status}`)
+                const data = query
+                ? await searchPosts(query)
+                : await fetchPosts();
 
-                const data = await res.json()
                 setPosts(data.posts)
                 setHasSearched(!!query)
                 console.log(data)
@@ -63,6 +59,9 @@ const PostList = () => {
         )}
         {!loading && !error && (
            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {posts.map((post) => (
+                <Card key={post.id} product={post} />
+            ))}
            </div>
         )}
     </section>

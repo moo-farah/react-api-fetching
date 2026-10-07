@@ -16,6 +16,7 @@ const CommentList = () => {
         setError(null)
 
         const data = await fetchCommentsByPost(postId, 10)
+        console.log(data);
         setComments(data.comments || [])
       } catch (err) {
         if (err.name !== "AbortError") setError(err.message)
